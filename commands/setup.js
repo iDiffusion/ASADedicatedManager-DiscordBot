@@ -143,6 +143,10 @@ module.exports = {
                         .setDescription('List all game servers')
                 )
                 .addSubcommand(subcommand =>
+                    subcommand.setName('showall')
+                        .setDescription('Make all servers visible to players at once')
+                )
+                .addSubcommand(subcommand =>
                     subcommand.setName('sync')
                         .setDescription('Re-sync servers from all machines')
                 )
@@ -409,6 +413,13 @@ module.exports = {
                     return `- **${s.display_name}** \`${s.profile_name}\` ${visibility}`;
                 }).join('\n');
                 return interaction.reply(`__**Game Servers:**__\n${serverList}`);
+            }
+
+            if (subcommand === 'showall') {
+                await GameServer.update({ hidden: false }, { where: { guild_id: guildId } });
+                interaction.client.asmaData.servers = await GameServer.findAll();
+                const count = interaction.client.asmaData.servers.filter(s => String(s.guild_id) === guildId && !s.hidden).length;
+                return interaction.reply(`**${count}** server(s) are now visible to players.`);
             }
 
             if (subcommand === 'sync') {
