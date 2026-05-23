@@ -245,29 +245,38 @@ async function handleStatus(interaction, guildId) {
         return interaction.editReply('No servers are currently configured.');
     }
 
-    const fields = [];
-    const statuses = [];
-
+    // Fetch live data from all machines into a map keyed by profile_name
+    const apiData = {};
     for (const machine of machines) {
         try {
             const data = await getServers(machine);
             for (const s of (data.servers || [])) {
-                const record = visibleServers.find(vs => vs.profile_name === s.ProfileName);
-                if (!record) continue;
-
-                statuses.push(s.Status);
-                fields.push({
-                    name: record.display_name,
-                    value: `${s.StatusEmoji || ''} ${s.Status}`.trim(),
-                    inline: true
-                });
-
-                // Write status back to DB and cache
-                GameServer.update({ last_status: s.Status }, { where: { guild_id: guildId, profile_name: s.ProfileName } }).catch(() => {});
-                record.last_status = s.Status;
+                apiData[s.ProfileName] = s;
             }
         } catch {
-            fields.push({ name: machine.name, value: '*(unreachable)*', inline: true });
+            // machine unreachable — servers from this machine will fall back to last_status
+        }
+    }
+
+    // Build fields in sorted order, falling back to last_status if API didn't return data
+    const fields = [];
+    const statuses = [];
+
+    for (const record of visibleServers) {
+        const s = apiData[record.profile_name];
+        if (s) {
+            statuses.push(s.Status);
+            fields.push({
+                name: record.display_name,
+                value: `${s.StatusEmoji || ''} ${s.Status}`.trim(),
+                inline: true
+            });
+            GameServer.update({ last_status: s.Status }, { where: { guild_id: guildId, profile_name: record.profile_name } }).catch(() => {});
+            record.last_status = s.Status;
+        } else {
+            const fallback = record.last_status || 'Unknown';
+            statuses.push(fallback);
+            fields.push({ name: record.display_name, value: `*(unreachable — last: ${fallback})*`, inline: true });
         }
     }
 
