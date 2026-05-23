@@ -377,13 +377,15 @@ module.exports = {
                 const apiToken = interaction.options.getString('api_token') || '';
 
                 try {
+                    await interaction.deferReply();
                     await Machine.create({ guild_id: guildId, name, base_url: baseUrl, api_token: apiToken });
                     interaction.client.asmaData.machines = await Machine.findAll();
-                    syncFromApi(guildId);
-                    return interaction.reply(`Machine **${name}** added at \`${baseUrl}\`. Syncing servers in the background.`);
+                    await syncFromApi(guildId);
+                    interaction.client.asmaData.servers = await GameServer.findAll();
+                    return interaction.editReply(`Machine **${name}** added at \`${baseUrl}\`. Servers synced — use \`/asma servers showall\` to make them visible.`);
                 } catch (error) {
                     console.error('Error adding machine:', error);
-                    return interaction.reply({ content: 'Failed to add machine.', flags: MessageFlags.Ephemeral });
+                    return interaction.editReply('Failed to add machine.');
                 }
             }
 
