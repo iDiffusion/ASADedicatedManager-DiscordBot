@@ -162,7 +162,7 @@ module.exports = {
         );
 
         if (grants.length === 0) {
-            return interaction.editReply({ content: 'You do not have permission to use this command.', flags: MessageFlags.Ephemeral });
+            return interaction.editReply('You do not have permission to use this command.');
         }
 
         // Use the most permissive grant (lowest cooldown)
