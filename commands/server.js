@@ -119,9 +119,9 @@ module.exports = {
         const focusedOption = interaction.options.getFocused(true);
 
         if (focusedOption.name === 'server') {
-            const visible = interaction.client.asmaData.servers.filter(s =>
-                String(s.guild_id) === guildId && !s.hidden
-            );
+            const visible = interaction.client.asmaData.servers
+                .filter(s => String(s.guild_id) === guildId && !s.hidden)
+                .sort((a, b) => a.display_name.localeCompare(b.display_name));
             let filtered = visible
                 .map(s => ({ name: s.display_name, value: s.profile_name }))
                 .filter(s => s.name.toLowerCase().startsWith(focusedOption.value.toLowerCase()));
@@ -237,7 +237,9 @@ module.exports = {
 
 async function handleStatus(interaction, guildId) {
     const machines = interaction.client.asmaData.machines.filter(m => String(m.guild_id) === guildId);
-    const visibleServers = interaction.client.asmaData.servers.filter(s => String(s.guild_id) === guildId && !s.hidden);
+    const visibleServers = interaction.client.asmaData.servers
+        .filter(s => String(s.guild_id) === guildId && !s.hidden)
+        .sort((a, b) => a.display_name.localeCompare(b.display_name));
 
     if (machines.length === 0 || visibleServers.length === 0) {
         return interaction.editReply('No servers are currently configured.');

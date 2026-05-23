@@ -240,7 +240,7 @@ module.exports = {
             await interaction.respond(filtered.map(choice => ({ name: choice, value: choice })));
 
         } else if (focusedOption.name === 'server') {
-            const servers = interaction.client.asmaData.servers.filter(s => String(s.guild_id) === guildId);
+            const servers = interaction.client.asmaData.servers.filter(s => String(s.guild_id) === guildId).sort((a, b) => a.display_name.localeCompare(b.display_name));
             let filtered = servers
                 .map(s => ({ name: s.display_name, value: s.profile_name }))
                 .filter(s => s.name.toLowerCase().startsWith(focusedOption.value.toLowerCase()));
@@ -402,7 +402,7 @@ module.exports = {
         /** SERVER MANAGEMENT **/
         if (subcommandGroup === 'servers') {
             if (subcommand === 'list') {
-                const servers = interaction.client.asmaData.servers.filter(s => String(s.guild_id) === guildId);
+                const servers = interaction.client.asmaData.servers.filter(s => String(s.guild_id) === guildId).sort((a, b) => a.display_name.localeCompare(b.display_name));
 
                 if (servers.length === 0) {
                     return interaction.reply({ content: 'No game servers have been found. Add a machine first.', flags: MessageFlags.Ephemeral });
