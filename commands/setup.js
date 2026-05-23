@@ -306,15 +306,17 @@ module.exports = {
                     .setTitle('Role Grants')
                     .setColor(0x5865F2);
 
+                let description = '';
                 for (const [roleId, grants] of Object.entries(grouped)) {
                     const grantList = grants.map(g => {
                         const serverText = g.profile_name ? ` \`[${g.profile_name}]\`` : '';
                         const cooldownText = g.cooldown > 0 ? ` *(${formatDuration(g.cooldown)} cd)*` : '';
                         return `${g.command}${serverText}${cooldownText}`;
-                    }).join('\n');
-                    embed.addFields({ name: `<@&${roleId}>`, value: grantList });
+                    }).join(', ');
+                    description += `<@&${roleId}>\n${grantList}\n\n`;
                 }
 
+                embed.setDescription(description.trim());
                 return interaction.reply({ embeds: [embed] });
             }
 
