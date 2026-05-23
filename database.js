@@ -112,7 +112,10 @@ const GameServer = sequelize.define('asmaGameServers', {
 }, {
     timestamps: true,
     createdAt: 'created_at',
-    updatedAt: 'updated_at'
+    updatedAt: 'updated_at',
+    indexes: [
+        { unique: true, fields: ['guild_id', 'profile_name'] }
+    ]
 });
 
 const CommandLog = sequelize.define('asmaCommandLog', {
