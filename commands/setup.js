@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-const { SlashCommandBuilder, PermissionFlagsBits, MessageFlags, InteractionContextType } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits, MessageFlags, InteractionContextType } = require('discord.js');
 const { Machine, GuildRole, GameServer } = require('../database');
 const { syncFromApi } = require('../asadmApi');
 
@@ -302,16 +302,20 @@ module.exports = {
                     grouped[key].push(r);
                 }
 
-                const lines = Object.entries(grouped).map(([roleId, grants]) => {
-                    const grantList = grants.map(g => {
-                        const serverText = g.profile_name ? ` [${g.profile_name}]` : '';
-                        const cooldownText = g.cooldown > 0 ? ` (${g.cooldown}s cd)` : '';
-                        return `${g.command}${serverText}${cooldownText}`;
-                    }).join(', ');
-                    return `<@&${roleId}>: ${grantList}`;
-                });
+                const embed = new EmbedBuilder()
+                    .setTitle('Role Grants')
+                    .setColor(0x5865F2);
 
-                return interaction.reply(`__**Role Grants:**__\n${lines.join('\n')}`);
+                for (const [roleId, grants] of Object.entries(grouped)) {
+                    const grantList = grants.map(g => {
+                        const serverText = g.profile_name ? ` \`[${g.profile_name}]\`` : '';
+                        const cooldownText = g.cooldown > 0 ? ` *(${formatDuration(g.cooldown)} cd)*` : '';
+                        return `${g.command}${serverText}${cooldownText}`;
+                    }).join('\n');
+                    embed.addFields({ name: `<@&${roleId}>`, value: grantList });
+                }
+
+                return interaction.reply({ embeds: [embed] });
             }
 
             const role = interaction.options.getRole('role');
