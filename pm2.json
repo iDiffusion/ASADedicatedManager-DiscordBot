@@ -1,0 +1,11 @@
+{
+    "apps": [{
+        "name": "WardenBot",
+        "script": "./bot.js",
+        "watch": true,
+        "ignore_watch": ["logs"],
+        "args": "--color",
+        "out_file": "./logs/discord_out.txt",
+        "error_file": "./logs/discord_error.txt"
+    }]
+}
