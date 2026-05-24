@@ -5,7 +5,7 @@ const { CommandLog, GameServer } = require('../database');
 const { getServers, executeCommand, rconCommand, getPlayers } = require('../asadmApi');
 
 // Commands that get written to CommandLog (excludes read-only)
-const LOGGED_COMMANDS = new Set(['start', 'stop', 'update', 'destroy', 'saveworld', 'backup', 'kill', 'rcon']);
+const LOGGED_COMMANDS = new Set(['start', 'stop', 'update', 'destroywilddinos', 'saveworld', 'backup', 'kill', 'serverchat']);
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -46,7 +46,7 @@ module.exports = {
             )
         )
         .addSubcommand(sub => sub
-            .setName('destroy')
+            .setName('destroywilddinos')
             .setDescription('Destroy all wild dinos on a server')
             .addStringOption(opt => opt
                 .setName('server')
@@ -96,8 +96,8 @@ module.exports = {
             )
         )
         .addSubcommand(sub => sub
-            .setName('rcon')
-            .setDescription('Send an RCON command to a server')
+            .setName('serverchat')
+            .setDescription('Send a message to the server chat')
             .addStringOption(opt => opt
                 .setName('server')
                 .setDescription('Server')
@@ -106,7 +106,7 @@ module.exports = {
             )
             .addStringOption(opt => opt
                 .setName('message')
-                .setDescription('RCON command to send')
+                .setDescription('Message to send in server chat')
                 .setRequired(true)
             )
         )
@@ -200,7 +200,7 @@ module.exports = {
         try {
             let result;
 
-            if (subcommand === 'rcon') {
+            if (subcommand === 'serverchat') {
                 const message = interaction.options.getString('message');
                 result = await rconCommand(machine, profileName, message);
             } else if (subcommand === 'players') {

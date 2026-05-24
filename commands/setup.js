@@ -6,10 +6,10 @@ const { syncFromApi } = require('../asadmApi');
 
 const PRESETS = {
     VIEWER: [
-        { command: 'status', cooldown: 0 }
+        { command: 'status', cooldown: 300 }
     ],
     PLAYER: [
-        { command: 'status', cooldown: 0 },
+        { command: 'status', cooldown: 60 },
         { command: 'start', cooldown: 3600 }
     ],
     OPERATOR: [
@@ -17,21 +17,22 @@ const PRESETS = {
         { command: 'start', cooldown: 0 },
         { command: 'stop', cooldown: 0 },
         { command: 'update', cooldown: 0 },
-        { command: 'destroy', cooldown: 0 },
+        { command: 'destroywilddinos', cooldown: 0 },
         { command: 'saveworld', cooldown: 0 },
-        { command: 'players', cooldown: 0 }
+        { command: 'players', cooldown: 0 },
+        { command: 'serverchat', cooldown: 0 }
     ],
     ADMIN: [
         { command: 'status', cooldown: 0 },
         { command: 'start', cooldown: 0 },
         { command: 'stop', cooldown: 0 },
         { command: 'update', cooldown: 0 },
-        { command: 'destroy', cooldown: 0 },
+        { command: 'destroywilddinos', cooldown: 0 },
         { command: 'saveworld', cooldown: 0 },
         { command: 'players', cooldown: 0 },
         { command: 'backup', cooldown: 0 },
         { command: 'kill', cooldown: 0 },
-        { command: 'rcon', cooldown: 0 }
+        { command: 'serverchat', cooldown: 0 }
     ]
 };
 
@@ -40,12 +41,12 @@ const COMMAND_CHOICES = [
     { name: 'start', value: 'start' },
     { name: 'stop', value: 'stop' },
     { name: 'update (stop + update + restart)', value: 'update' },
-    { name: 'destroy (wild dinos)', value: 'destroy' },
-    { name: 'saveworld', value: 'saveworld' },
+    { name: 'destroy wild dinos', value: 'destroywilddinos' },
+    { name: 'save world', value: 'saveworld' },
     { name: 'players', value: 'players' },
     { name: 'backup', value: 'backup' },
     { name: 'kill (force kill)', value: 'kill' },
-    { name: 'rcon', value: 'rcon' }
+    { name: 'server chat', value: 'serverchat' }
 ];
 
 module.exports = {
@@ -68,9 +69,9 @@ module.exports = {
                         .setDescription('Permission preset to apply')
                         .setRequired(true)
                         .addChoices(
-                            { name: 'VIEWER — status only', value: 'VIEWER' },
-                            { name: 'PLAYER — status, start (1hr cooldown)', value: 'PLAYER' },
-                            { name: 'OPERATOR — status, start, stop, update, destroy, saveworld, players', value: 'OPERATOR' },
+                            { name: 'VIEWER — status (5min cooldown) only', value: 'VIEWER' },
+                            { name: 'PLAYER — status (1min cooldown), start (1hr cooldown)', value: 'PLAYER' },
+                            { name: 'OPERATOR — status, start, stop, update, destroywildinos, saveworld, players, serverchat', value: 'OPERATOR' },
                             { name: 'ADMIN — all commands, no cooldown', value: 'ADMIN' }
                         )
                 )
