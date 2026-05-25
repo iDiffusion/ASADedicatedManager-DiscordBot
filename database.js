@@ -121,7 +121,7 @@ const GameServer = sequelize.define('asmaGameServers', {
     ]
 });
 
-const CommandLog = sequelize.define('asmaCommandLog', {
+const CommandLog = sequelize.define('asmaCommandLogs', {
     id: {
         type: DataTypes.INTEGER(11),
         allowNull: false,
