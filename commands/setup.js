@@ -329,14 +329,14 @@ module.exports = {
                 const cooldown = interaction.options.getInteger('cooldown') || 0;
 
                 try {
-                    await GuildRole.create({ guild_id: guildId, role_id: role.id, command, profile_name: profileName, cooldown });
+                    await GuildRole.upsert({ guild_id: guildId, role_id: role.id, command, profile_name: profileName, cooldown });
                     interaction.client.asmaData.roles = await GuildRole.findAll();
                     const serverText = profileName ? ` on **${profileName}**` : ' on **all servers**';
                     const cooldownText = cooldown > 0 ? ` (cooldown: ${formatDuration(cooldown)})` : '';
                     return interaction.reply(`<@&${role.id}> can now use **${command}**${serverText}${cooldownText}.`);
                 } catch (error) {
                     console.error('Error adding role grant:', error);
-                    return interaction.reply({ content: 'Failed to add grant. This may be a duplicate entry.', flags: MessageFlags.Ephemeral });
+                    return interaction.reply({ content: 'Failed to add grant.', flags: MessageFlags.Ephemeral });
                 }
             }
 

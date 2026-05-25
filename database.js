@@ -46,7 +46,10 @@ const GuildRole = sequelize.define("asmaGuildRoles", {
         allowNull: true
     }
 }, {
-    timestamps: false
+    timestamps: false,
+    indexes: [
+        { unique: true, fields: ['guild_id', 'role_id', 'command', 'profile_name'] }
+    ]
 });
 
 const Machine = sequelize.define('asmaMachines', {
