@@ -66,7 +66,7 @@ module.exports = {
             )
         )
         .addSubcommand(sub => sub
-            .setName('players')
+            .setName('listplayers')
             .setDescription('List players currently on a server')
             .addStringOption(opt => opt
                 .setName('server')
@@ -203,7 +203,7 @@ module.exports = {
             if (subcommand === 'serverchat') {
                 const message = interaction.options.getString('message');
                 result = await rconCommand(machine, profileName, message);
-            } else if (subcommand === 'players') {
+            } else if (subcommand === 'listplayers') {
                 result = await getPlayers(machine, profileName);
                 const players = result.players || [];
                 if (players.length === 0) {

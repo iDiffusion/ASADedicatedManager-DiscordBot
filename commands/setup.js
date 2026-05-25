@@ -19,7 +19,7 @@ const PRESETS = {
         { command: 'update', cooldown: 0 },
         { command: 'destroywilddinos', cooldown: 0 },
         { command: 'saveworld', cooldown: 0 },
-        { command: 'players', cooldown: 0 },
+        { command: 'listplayers', cooldown: 0 },
         { command: 'serverchat', cooldown: 0 }
     ],
     ADMIN: [
@@ -29,7 +29,7 @@ const PRESETS = {
         { command: 'update', cooldown: 0 },
         { command: 'destroywilddinos', cooldown: 0 },
         { command: 'saveworld', cooldown: 0 },
-        { command: 'players', cooldown: 0 },
+        { command: 'listplayers', cooldown: 0 },
         { command: 'backup', cooldown: 0 },
         { command: 'kill', cooldown: 0 },
         { command: 'serverchat', cooldown: 0 }
@@ -43,7 +43,7 @@ const COMMAND_CHOICES = [
     { name: 'update (stop + update + restart)', value: 'update' },
     { name: 'destroy wild dinos', value: 'destroywilddinos' },
     { name: 'save world', value: 'saveworld' },
-    { name: 'players', value: 'players' },
+    { name: 'list players', value: 'listplayers' },
     { name: 'backup', value: 'backup' },
     { name: 'kill (force kill)', value: 'kill' },
     { name: 'server chat', value: 'serverchat' }
